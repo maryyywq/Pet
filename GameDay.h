@@ -1,5 +1,12 @@
 #pragma once
-#include "Weather.h"
+
+//Определение погоды
+enum Weather {
+    SUNNY,
+    RAINY,
+    WINDY,
+    STORM
+};
 
 //Класс игрового дня
 class GameDay {

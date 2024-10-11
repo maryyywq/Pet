@@ -9,7 +9,6 @@
 #include "Medicine.h"
 #include "Food.h"
 #include "PetItem.h"
-#include "Weather.h"
 #include "Mood.h"
 
 //Абстрактный класс питомца
@@ -35,14 +34,6 @@ public:
     void setStatus(const Status& s) { status = s; }
 
     virtual void makeSound() const = 0; //Чисто виртуальная функция
-    void display() const {
-        std::cout << "Имя питомца: " << name << std::endl;
-        std::cout << "Возраст питомца: " << age << std::endl;
-        std::cout << "Сытость: " << status.getSatiety() << std::endl;
-        std::cout << "Энергия: " << status.getEnergy() << std::endl;
-        std::cout << "Здоровье: " << status.getHealth() << std::endl;
-        std::cout << "Настроение: " << getMoodString(status.getMood()) << std::endl;
-    }
 
     void use(PetItem *item) {
         if (item->getType() == "Food") {
@@ -130,29 +121,6 @@ std::ostream& operator<<(std::ostream& stream, const Pet& pet)
     return stream;
 }
 
-//Класс кошки
-class Cat : public Pet {
-public:
-    Cat() : Pet() {}
-    Cat(const std::string& name, int age) : Pet(name, age) {}
-    ~Cat() = default; //Деструктор по умолчанию
-
-    void makeSound() const override {
-        std::cout << name << " говорит: Мяу!" << std::endl;
-    }
-};
-
-//Класс собаки
-class Dog : public Pet {
-public:
-    Dog() : Pet() {}
-    Dog(const std::string& name, int age) : Pet(name, age) {}
-    ~Dog() = default; //Деструктор по умолчанию
-
-    void makeSound() const override {
-        std::cout << name << " говорит: Гав!" << std::endl;
-    }
-};
 
 
 
