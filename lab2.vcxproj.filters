@@ -53,7 +53,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lab2.cpp">
+    <ClCompile Include="Pet.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
