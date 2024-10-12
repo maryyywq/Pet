@@ -128,8 +128,10 @@
     <ClInclude Include="Cat.h" />
     <ClInclude Include="Dog.h" />
     <ClInclude Include="Food.h" />
+    <ClInclude Include="Football.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameDay.h" />
+    <ClInclude Include="LaserPointer.h" />
     <ClInclude Include="Medicine.h" />
     <ClInclude Include="Mood.h" />
     <ClInclude Include="Owner.h" />

@@ -2,6 +2,8 @@
 #include "Pet.h"
 #include "Cat.h"
 #include "Dog.h"
+#include "Football.h"
+#include "LaserPointer.h"
 
 int main() {
     SetConsoleCP(1251);
@@ -97,5 +99,16 @@ int main() {
     petsArray[0]->use(&dogFood2);
     for (size_t i = 0; i < 2; i++) delete petsArray[i];
 
+    
+    Game* pointerGame;
+    std::cout << std::endl;
+    pointerGame = new Game();
+    pointerGame->play();
+    delete pointerGame;
+    pointerGame = new Football();
+    pointerGame->play();
+    delete pointerGame;
+    pointerGame = new LaserPointer();
+    pointerGame->play();
     return 0;
 }

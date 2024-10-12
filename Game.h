@@ -23,4 +23,6 @@ public:
     void setGameName(const std::string& gn) { gameName = gn; }
     void setFunValue(int fv) { funValue = fv; }
     void setEnergyCost(int ec) { energyCost = ec; }
+
+    virtual void play() { std::cout << "я играю в стандартную игру!" << std::endl; }
 };
