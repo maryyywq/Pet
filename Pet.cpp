@@ -110,5 +110,7 @@ int main() {
     delete pointerGame;
     pointerGame = new LaserPointer();
     pointerGame->play();
+    Football football;
+    football.play();
     return 0;
 }
