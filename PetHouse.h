@@ -25,7 +25,7 @@ public:
     //Конструктор копирования
     PetHouse(const PetHouse& other)
         : houseName(other.houseName), address(other.address), comfortLevel(other.comfortLevel) {
-        //Счетчик увеличивать не нужно, так как это копия существующего объекта
+        houseCount++;
     }
 
     ~PetHouse() {

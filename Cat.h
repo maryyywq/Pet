@@ -13,10 +13,12 @@ public:
         std::cout << name << " говорит: Мяу!" << std::endl;
     }
 
-    void setAge(int age) {
+    void setAge(int age) override {
         if (age < 0 || age > 26) {
-            throw std::invalid_argument("Возраст кошки должен быть в пределах от 0 до 30.");
+            throw std::invalid_argument("Возраст кошки должен быть в пределах от 0 до 26.");
         }
-        this->age = age;
+        Pet::setAge(age);
     }
+
+    std::string getType() override { return "Cat"; }
 };

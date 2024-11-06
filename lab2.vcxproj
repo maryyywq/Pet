@@ -134,6 +134,7 @@
     <ClInclude Include="LaserPointer.h" />
     <ClInclude Include="Medicine.h" />
     <ClInclude Include="Mood.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Owner.h" />
     <ClInclude Include="Pet.h" />
     <ClInclude Include="PetHouse.h" />
