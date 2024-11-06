@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
+#include "Object.h"
 
-class PetItem {
+class PetItem :public Object{
 protected:
     std::string name;
     int value;
@@ -27,6 +28,4 @@ public:
     void setName(const std::string& name) { this->name = name; }
     void setValue(int value) { this->value = value; }
     void setCost(int cost) { this->cost = cost; }
-
-    virtual std::string getType() = 0; //Чисто виртуальная функция
 };

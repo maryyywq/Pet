@@ -4,7 +4,6 @@
 #include "Status.h"
 #include "PetHouse.h"
 #include "GameDay.h"
-#include "Owner.h"
 #include "Game.h"
 #include "Medicine.h"
 #include "Food.h"
@@ -12,7 +11,7 @@
 #include "Mood.h"
 
 //Абстрактный класс питомца
-class Pet {
+class Pet : public Object {
 protected:
     std::string name;
     int age;
@@ -32,7 +31,7 @@ public:
     //Геттеры
     std::string getName() const { return name; }
     int getAge() const { return age; }
-    Status getStatus() const { return status; }
+    const Status& getStatus() const { return status; }
 
     //Сеттеры
     void setName(const std::string& name) {
@@ -42,7 +41,7 @@ public:
         this->name = name;
     }
 
-    void setAge(int age) {
+    virtual void setAge(int age) {
         this->age = age;
     }
 
@@ -121,6 +120,8 @@ public:
         makeSound(); //Питомец издает звук после сна
     }
 
+    friend bool areFriends(std::shared_ptr<Pet> Pet1, std::shared_ptr<Pet> Pet2);
+
     static const int walkEnergyCost = 5;
     static const int healthCost = 5;
     static const int satietyCost = 10;
@@ -135,4 +136,22 @@ std::ostream& operator<<(std::ostream& stream, const Pet& pet) {
     stream << "Здоровье: " << pet.getStatus().getHealth() << std::endl;
     stream << "Настроение: " << getMoodString(pet.getStatus().getMood()) << std::endl;
     return stream;
+}
+
+bool areFriends(std::shared_ptr<Pet> Pet1, std::shared_ptr<Pet> Pet2)
+{
+    if (Pet1->getType() == Pet2->getType() && abs(Pet1->age - Pet2->age) <= 2)
+    {
+        Pet1->status.setMood(HAPPY);
+        Pet2->status.setMood(HAPPY);
+        std::cout << Pet1->name << " и " << Pet2->name << " - друзья!" << std::endl;
+        return true;
+    }
+    else
+    {
+        Pet1->status.setMood(ANGRY);
+        Pet2->status.setMood(ANGRY);
+        std::cout << Pet1->name << " и " << Pet2->name << " совсем не друзья!" << std::endl;
+        return false;
+    }
 }
