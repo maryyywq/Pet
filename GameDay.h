@@ -8,7 +8,7 @@ enum Weather {
     STORM
 };
 
-// Класс игрового дня
+//Класс игрового дня
 class GameDay {
 private:
     int dayNumber;
@@ -19,17 +19,17 @@ public:
     GameDay(int dayNumber, Weather weather)
         : dayNumber(dayNumber), weather(weather) {}
 
-    // Конструктор копирования
+    //Конструктор копирования
     GameDay(const GameDay& other)
         : dayNumber(other.dayNumber), weather(other.weather) {}
 
-    ~GameDay() = default; // Деструктор по умолчанию
+    ~GameDay() = default; //Деструктор по умолчанию
 
-    // Геттеры
-    int getDayNumber() const { return this->dayNumber; }
-    Weather getWeather() const { return this->weather; }
+    //Геттеры
+    int getDayNumber() const { return dayNumber; }
+    Weather getWeather() const { return weather; }
 
-    // Сеттеры
-    void setDayNumber(int dn) { this->dayNumber = dn; }
-    void setWeather(Weather w) { this->weather = w; }
+    //Сеттеры
+    void setDayNumber(int dayNumber) { this->dayNumber = dayNumber; }
+    void setWeather(Weather weather) { this->weather = weather; }
 };
