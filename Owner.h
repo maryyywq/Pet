@@ -1,31 +1,56 @@
 #pragma once
 #include <string>
+#include <iostream>
 
-// Класс хозяина
-class Owner {
+class PetHouse {
 private:
-    std::string ownerName;
-    int ownerAge;
-    int money;
+    std::string houseName;
+    std::string address;
+    int comfortLevel;
+
+    // Статическое поле для отслеживания количества домов
+    static int houseCount;
 
 public:
-    Owner() : ownerName(""), ownerAge(0), money(0) {}
-    Owner(const std::string& ownerName, int ownerAge, int money)
-        : ownerName(ownerName), ownerAge(ownerAge), money(money) {}
+    PetHouse() : houseName(""), address(""), comfortLevel(0) {
+        // Увеличиваем счетчик при создании нового дома
+        houseCount++;
+    }
+
+    PetHouse(const std::string& houseName, const std::string& address, int comfortLevel)
+        : houseName(houseName), address(address), comfortLevel(comfortLevel) {
+        // Увеличиваем счетчик при создании нового дома
+        houseCount++;
+    }
 
     // Конструктор копирования
-    Owner(const Owner& other)
-        : ownerName(other.ownerName), ownerAge(other.ownerAge), money(other.money) {}
+    PetHouse(const PetHouse& other)
+        : houseName(other.houseName), address(other.address), comfortLevel(other.comfortLevel) {
+        // Счетчик увеличивать не нужно, так как это копия существующего объекта
+    }
 
-    ~Owner() = default; // Деструктор по умолчанию
+    ~PetHouse() {
+        // Уменьшаем счетчик при удалении дома
+        houseCount--;
+    }
 
     // Геттеры
-    std::string getOwnerName() const { return this->ownerName; }
-    int getOwnerAge() const { return this->ownerAge; }
-    int getMoney() const { return this->money; }
+    std::string getHouseName() const { return houseName; }
+    std::string getAddress() const { return address; }
+    int getComfortLevel() const { return comfortLevel; }
 
     // Сеттеры
-    void setOwnerName(const std::string& on) { this->ownerName = on; }
-    void setOwnerAge(int oa) { this->ownerAge = oa; }
-    void setMoney(int m) { this->money = m; }
+    void setHouseName(const std::string& hn) { houseName = hn; }
+    void setAddress(const std::string& a) { address = a; }
+    void setComfortLevel(int cl) { comfortLevel = (cl > maxComfort) ? maxComfort : cl; }
+
+    // Статический метод для получения количества домов
+    static int getHouseCount() {
+        return houseCount;
+    }
+
+    static const int maxComfort = 100;
 };
+
+// Инициализация статического поля
+int PetHouse::houseCount = 0;
