@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-//Класс дома питомца
+// Класс дома питомца
 class PetHouse {
 private:
     std::string houseName;
@@ -12,17 +12,24 @@ public:
     PetHouse() : houseName(""), address(""), comfortLevel(0) {}
     PetHouse(const std::string& houseName, const std::string& address, int comfortLevel)
         : houseName(houseName), address(address), comfortLevel(comfortLevel) {}
-    ~PetHouse() = default; //Деструктор по умолчанию
 
-    //Геттеры
-    std::string getHouseName() const { return houseName; }
-    std::string getAddress() const { return address; }
-    int getComfortLevel() const { return comfortLevel; }
+    // Конструктор копирования
+    PetHouse(const PetHouse& other)
+        : houseName(other.houseName), address(other.address), comfortLevel(other.comfortLevel) {}
 
-    //Сеттеры
-    void setHouseName(const std::string& hn) { houseName = hn; }
-    void setAddress(const std::string& a) { address = a; }
-    void setComfortLevel(int cl) { comfortLevel = (cl > maxComfort) ? maxComfort : cl; }
+    ~PetHouse() = default; // Деструктор по умолчанию
+
+    // Геттеры
+    std::string getHouseName() const { return this->houseName; }
+    std::string getAddress() const { return this->address; }
+    int getComfortLevel() const { return this->comfortLevel; }
+
+    // Сеттеры
+    void setHouseName(const std::string& hn) { this->houseName = hn; }
+    void setAddress(const std::string& a) { this->address = a; }
+    void setComfortLevel(int cl) {
+        this->comfortLevel = (cl > this->maxComfort) ? this->maxComfort : cl;
+    }
 
     static const int maxComfort = 100;
 };

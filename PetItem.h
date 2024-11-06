@@ -10,18 +10,23 @@ protected:
 public:
     PetItem() : name(""), value(0), cost(0) {}
     PetItem(const std::string& n, int v, int c)
-        : name(name), value(v), cost(c) {}
-    virtual ~PetItem() = default; //Деструктор по умолчанию
+        : name(n), value(v), cost(c) {} // Исправлено: теперь передаются правильные параметры в конструктор
 
-    //Геттеры
-    std::string getName() const { return name; }
-    int getValue() const { return value; }
-    int getCost() const { return cost; }
+    // Конструктор копирования
+    PetItem(const PetItem& other)
+        : name(other.name), value(other.value), cost(other.cost) {}
 
-    //Сеттеры
-    void setName(const std::string& fn) { name = fn; }
-    void setValue(int nv) { value = nv; }
-    void setCost(int c) { cost = c; }
+    virtual ~PetItem() = default; // Деструктор по умолчанию
 
-    virtual std::string getType() = 0;
+    // Геттеры
+    std::string getName() const { return this->name; }
+    int getValue() const { return this->value; }
+    int getCost() const { return this->cost; }
+
+    // Сеттеры
+    void setName(const std::string& fn) { this->name = fn; }
+    void setValue(int nv) { this->value = nv; }
+    void setCost(int c) { this->cost = c; }
+
+    virtual std::string getType() = 0; // Чисто виртуальная функция
 };

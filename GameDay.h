@@ -1,6 +1,6 @@
 #pragma once
 
-//Определение погоды
+// Определение погоды
 enum Weather {
     SUNNY,
     RAINY,
@@ -8,7 +8,7 @@ enum Weather {
     STORM
 };
 
-//Класс игрового дня
+// Класс игрового дня
 class GameDay {
 private:
     int dayNumber;
@@ -18,13 +18,18 @@ public:
     GameDay() : dayNumber(0), weather(SUNNY) {}
     GameDay(int dayNumber, Weather weather)
         : dayNumber(dayNumber), weather(weather) {}
-    ~GameDay() = default; //Деструктор по умолчанию
 
-    //Геттеры
-    int getDayNumber() const { return dayNumber; }
-    Weather getWeather() const { return weather; }
+    // Конструктор копирования
+    GameDay(const GameDay& other)
+        : dayNumber(other.dayNumber), weather(other.weather) {}
 
-    //Сеттеры
-    void setDayNumber(int dn) { dayNumber = dn; }
-    void setWeather(Weather w) { weather = w; }
+    ~GameDay() = default; // Деструктор по умолчанию
+
+    // Геттеры
+    int getDayNumber() const { return this->dayNumber; }
+    Weather getWeather() const { return this->weather; }
+
+    // Сеттеры
+    void setDayNumber(int dn) { this->dayNumber = dn; }
+    void setWeather(Weather w) { this->weather = w; }
 };
