@@ -11,7 +11,7 @@
 #include "PetItem.h"
 #include "Mood.h"
 
-//Абстрактный класс питомца
+// Абстрактный класс питомца
 class Pet {
 protected:
     std::string name;
@@ -21,97 +21,102 @@ protected:
 public:
     Pet() : name(""), age(0), status() {}
     Pet(const std::string& name, int age) : name(name), age(age), status() {}
-    virtual ~Pet() = default; //Виртуальный деструктор по умолчанию
 
-    //Геттеры
-    std::string getName() const { return name; }
-    int getAge() const { return age; }
-    Status getStatus() const { return status; }
+    // Конструктор копирования
+    Pet(const Pet& other)
+        : name(other.name), age(other.age), status(other.status) {
+    }
 
-    //Сеттеры
-    void setName(const std::string& n) { name = n; }
-    void setAge(int a) { age = a; }
-    void setStatus(const Status& s) { status = s; }
+    virtual ~Pet() = default; // Виртуальный деструктор по умолчанию
 
-    virtual void makeSound() const = 0; //Чисто виртуальная функция
+    // Геттеры
+    std::string getName() const { return this->name; }
+    int getAge() const { return this->age; }
+    Status getStatus() const { return this->status; }
 
-    void use(PetItem *item) {
+    // Сеттеры
+    void setName(const std::string& n) { this->name = n; }
+    void setAge(int a) { this->age = a; }
+    void setStatus(const Status& s) { this->status = s; }
+
+    virtual void makeSound() const = 0; // Чисто виртуальная функция
+
+    void use(PetItem* item) {
         if (item->getType() == "Food") {
-            int newSatiety = status.getSatiety() + item->getValue();
-            status.setSatiety(newSatiety);
-            if (status.getSatiety() == Status::maxSatiety) {
-                status.setMood(HAPPY);
+            int newSatiety = this->status.getSatiety() + item->getValue();
+            this->status.setSatiety(newSatiety);
+            if (this->status.getSatiety() == Status::maxSatiety) {
+                this->status.setMood(HAPPY);
             }
-            std::cout << name << " покушал(а) " << item->getName() << " и его(ее) голод уменьшился." << std::endl;
-            makeSound(); //Питомец издает звук после еды
+            std::cout << this->name << " покушал(а) " << item->getName() << " и его(ее) голод уменьшился." << std::endl;
+            this->makeSound(); // Питомец издает звук после еды
         }
         else if (item->getType() == "Medicine") {
-            status.setHealth(status.getHealth() + item->getValue());
-            if (status.getHealth() > Status::maxHealth) {
-                status.setHealth(Status::maxHealth);
-                status.setMood(HAPPY);
+            this->status.setHealth(this->status.getHealth() + item->getValue());
+            if (this->status.getHealth() > Status::maxHealth) {
+                this->status.setHealth(Status::maxHealth);
+                this->status.setMood(HAPPY);
             }
-            std::cout << name << " принял(а) " << item->getName() << " и его(ее) здоровье улучшилось." << std::endl;
+            std::cout << this->name << " принял(а) " << item->getName() << " и его(ее) здоровье улучшилось." << std::endl;
         }
     }
 
     void play(Game game) {
-        if (status.getEnergy() >= game.getEnergyCost()) {
-            status.setMood(HAPPY);
-            status.setEnergy(status.getEnergy() - game.getEnergyCost());
-            status.setSatiety(status.getSatiety() - satietyCost);
-            std::cout << name << " поиграл(а) и очень счастлив(а)!" << std::endl;
-            makeSound(); //Питомец издает звук после игры
+        if (this->status.getEnergy() >= game.getEnergyCost()) {
+            this->status.setMood(HAPPY);
+            this->status.setEnergy(this->status.getEnergy() - game.getEnergyCost());
+            this->status.setSatiety(this->status.getSatiety() - satietyCost);
+            std::cout << this->name << " поиграл(а) и очень счастлив(а)!" << std::endl;
+            this->makeSound(); // Питомец издает звук после игры
         }
         else {
-            std::cout << name << " слишком устал(а) для игры." << std::endl;
+            std::cout << this->name << " слишком устал(а) для игры." << std::endl;
         }
     }
 
     void walk(Weather weather) {
         if (weather == STORM || weather == RAINY || weather == WINDY) {
-            status.setMood(AFRAID);
-            status.setHealth(status.getHealth() - healthCost);
-            if (status.getHealth() < 0) status.setHealth(0);
-            std::cout << name << " испугался(ась) из-за плохой погоды." << std::endl;
+            this->status.setMood(AFRAID);
+            this->status.setHealth(this->status.getHealth() - healthCost);
+            if (this->status.getHealth() < 0) this->status.setHealth(0);
+            std::cout << this->name << " испугался(ась) из-за плохой погоды." << std::endl;
         }
         else {
-            status.setMood(HAPPY);
-            std::cout << name << " гуляет и наслаждается хорошей погодой." << std::endl;
+            this->status.setMood(HAPPY);
+            std::cout << this->name << " гуляет и наслаждается хорошей погодой." << std::endl;
         }
-        status.setEnergy(status.getEnergy() - walkEnergyCost);
-        status.setSatiety(status.getSatiety() - satietyCost);
-        if (status.getEnergy() < 0) status.setEnergy(0);
+        this->status.setEnergy(this->status.getEnergy() - walkEnergyCost);
+        this->status.setSatiety(this->status.getSatiety() - satietyCost);
+        if (this->status.getEnergy() < 0) this->status.setEnergy(0);
 
-        makeSound(); //Питомец издает звук после прогулки
+        this->makeSound(); // Питомец издает звук после прогулки
     }
 
     void sleep(PetHouse house) {
-        status.setEnergy(status.getEnergy() + house.getComfortLevel());
-        status.setSatiety(status.getSatiety() - sleepHungerCost);
-        if (status.getEnergy() > Status::maxEnergy) {
-            status.setEnergy(Status::maxEnergy);
+        this->status.setEnergy(this->status.getEnergy() + house.getComfortLevel());
+        this->status.setSatiety(this->status.getSatiety() - sleepHungerCost);
+        if (this->status.getEnergy() > Status::maxEnergy) {
+            this->status.setEnergy(Status::maxEnergy);
         }
 
-        if (status.getEnergy() >= 50) {
-            std::cout << name << " хорошо отдохнул(а)!" << std::endl;
-            status.setMood(HAPPY);
+        if (this->status.getEnergy() >= 50) {
+            std::cout << this->name << " хорошо отдохнул(а)!" << std::endl;
+            this->status.setMood(HAPPY);
         }
         else {
-            std::cout << name << " не очень хорошо отдохнул(а) :(" << std::endl;
-            status.setMood(SAD);
+            std::cout << this->name << " не очень хорошо отдохнул(а) :(" << std::endl;
+            this->status.setMood(SAD);
         }
-        makeSound(); //Питомец издает звук после сна
+        this->makeSound(); // Питомец издает звук после сна
     }
 
     static const int walkEnergyCost = 5;
     static const int healthCost = 5;
     static const int satietyCost = 10;
-    static const int sleepHungerCost = 40; 
+    static const int sleepHungerCost = 40;
 };
 
-std::ostream& operator<<(std::ostream& stream, const Pet& pet)
-{
+std::ostream& operator<<(std::ostream& stream, const Pet& pet) {
     stream << "Имя питомца: " << pet.getName() << std::endl;
     stream << "Возраст питомца: " << pet.getAge() << std::endl;
     stream << "Сытость: " << pet.getStatus().getSatiety() << std::endl;
@@ -120,8 +125,3 @@ std::ostream& operator<<(std::ostream& stream, const Pet& pet)
     stream << "Настроение: " << getMoodString(pet.getStatus().getMood()) << std::endl;
     return stream;
 }
-
-
-
-
-
