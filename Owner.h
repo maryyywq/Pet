@@ -12,7 +12,11 @@ private:
 public:
     Owner() : ownerName(""), ownerAge(0), money(0) {}
     Owner(const std::string& ownerName, int ownerAge, int money)
-        : ownerName(ownerName), ownerAge(ownerAge), money(money) {}
+    {
+        setOwnerName(ownerName);
+        setOwnerAge(ownerAge);
+        setMoney(money);
+    }
 
     //Конструктор копирования
     Owner(const Owner& other)

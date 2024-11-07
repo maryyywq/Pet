@@ -22,7 +22,11 @@ protected:
 
 public:
     Pet() : name(""), age(0), status(), sex(MALE) {}
-    Pet(const std::string& name, int age, Sex sex) : name(name), age(age), status(), sex(sex) {}
+    Pet(const std::string& name, int age, Sex sex) {
+        setName(name);
+        setAge(age);
+        setSex(sex);
+    }
 
     //Конструктор копирования
     Pet(const Pet& other)

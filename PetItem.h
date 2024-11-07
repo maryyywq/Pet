@@ -10,8 +10,12 @@ protected:
 
 public:
     PetItem() : name(""), value(0), cost(0) {}
-    PetItem(const std::string& name, int value, int cost)
-        : name(name), value(value), cost(cost) {} 
+    PetItem(const std::string& name, int value, int cost) {
+        setName(name);
+        setValue(value);
+        setCost(cost);
+    }
+        
 
     //Конструктор копирования
     PetItem(const PetItem& other)

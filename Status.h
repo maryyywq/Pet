@@ -10,7 +10,13 @@ private:
     Mood mood;
 
 public:
-    Status() : satiety(maxSatiety), energy(maxEnergy / 2), health(maxHealth), mood(HAPPY) {}
+    Status() {
+        setSatiety(maxSatiety);
+        setEnergy(maxEnergy / 2);
+        setHealth(maxHealth);
+        setMood(HAPPY);
+    }
+
 
     //Конструктор копирования
     Status(const Status& other)
