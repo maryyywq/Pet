@@ -41,6 +41,24 @@ int main() {
     std::cout << valera;
     valera += &cat2;
     std::cout << valera;
-    
+
+    Cat* catptr = new Cat("Борис", 2, MALE);
+    auto catunique = std::unique_ptr<Cat>(catptr);
+    //auto catunique2 = std::unique_ptr<Cat>(catptr);
+    catunique.release();
+
+    auto catsmartptr = std::shared_ptr<Cat>(catptr);
+
+    {
+        //auto catsmartptrnew = std::shared_ptr<Cat>(catptr);
+        //иначе, указатель выше очистит память под кота Бориса, и любая попытка использовать catsmartptr приведет к исключению
+    }
+
+    auto name = cat2.getName();
+    std::cout << name.append(" наслаждается своей жизнью!") << std::endl;
+    std::cout << name.substr(name.find("наслаждается")) << std::endl;
+    std::cout << name.replace(name.find("наслаждается"), 8, "раду") << std::endl;
+    std::cout << name.erase(6) << std::endl;
+        
     return 0;
 }
