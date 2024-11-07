@@ -26,9 +26,26 @@ public:
     int getEnergyCost() const { return energyCost; }
 
     //—еттеры
-    void setGameName(const std::string& gameName) { this->gameName = gameName; }
-    void setFunValue(int funValue) { this->funValue = funValue; }
-    void setEnergyCost(int energyCost) { this->energyCost = energyCost; }
+    void setGameName(const std::string& gameName) {
+        if (gameName.empty()) {
+            throw std::invalid_argument("Ќазвание игры не может быть пустым!");
+        }
+        this->gameName = gameName;
+    }
+
+    void setFunValue(int funValue) {
+        if (funValue < 0) {
+            throw std::invalid_argument("«начение весель€ не может быть отрицательным!");
+        }
+        this->funValue = funValue;
+    }
+
+    void setEnergyCost(int energyCost) {
+        if (energyCost < 0) {
+            throw std::invalid_argument("Ёнергозатраты не могут быть отрицательными!");
+        }
+        this->energyCost = energyCost;
+    }
 
     void play() { std::cout << "€ играю в стандартную игру!" << std::endl; }
 };

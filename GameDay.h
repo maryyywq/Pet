@@ -30,6 +30,14 @@ public:
     Weather getWeather() const { return weather; }
 
     //Сеттеры
-    void setDayNumber(int dayNumber) { this->dayNumber = dayNumber; }
-    void setWeather(Weather weather) { this->weather = weather; }
+    void setDayNumber(int dayNumber) {
+        if (dayNumber < 0) {
+            throw std::invalid_argument("Номер дня не может быть отрицательным!");
+        }
+        this->dayNumber = dayNumber;
+    }
+
+    void setWeather(Weather weather) {
+        this->weather = weather;
+    }
 };

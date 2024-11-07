@@ -39,9 +39,26 @@ public:
     int getComfortLevel() const { return comfortLevel; }
 
     //Сеттеры
-    void setHouseName(const std::string& houseName) { this->houseName = houseName; }
-    void setAddress(const std::string& address) { this->address = address; }
-    void setComfortLevel(int comfortLevel) { this->comfortLevel = (comfortLevel > maxComfort) ? maxComfort : comfortLevel; }
+    void setHouseName(const std::string& houseName) {
+        if (houseName.empty()) {
+            throw std::invalid_argument("Название дома не может быть пустым!");
+        }
+        this->houseName = houseName;
+    }
+
+    void setAddress(const std::string& address) {
+        if (address.empty()) {
+            throw std::invalid_argument("Адрес не может быть пустым!");
+        }
+        this->address = address;
+    }
+
+    void setComfortLevel(int comfortLevel) {
+        if (comfortLevel < 0 || comfortLevel > maxComfort) {
+            throw std::invalid_argument("Уровень комфорта должен быть в диапазоне от 0 до " + std::to_string(maxComfort) + "!");
+        }
+        this->comfortLevel = comfortLevel;
+    }
 
     //Статический метод для получения количества домов
     static int getHouseCount() {

@@ -27,9 +27,26 @@ public:
     const std::vector<std::shared_ptr<Pet>>& getPets() const { return this->pets; }
 
     //Сеттеры
-    void setOwnerName(const std::string& ownerName) { this->ownerName = ownerName; }
-    void setOwnerAge(int ownerAge) { this->ownerAge = ownerAge; }
-    void setMoney(int money) { this->money = money; }
+    void setOwnerName(const std::string& ownerName) {
+        if (ownerName.empty()) {
+            throw std::invalid_argument("Имя владельца не может быть пустым!");
+        }
+        this->ownerName = ownerName;
+    }
+
+    void setOwnerAge(int ownerAge) {
+        if (ownerAge < 0) {
+            throw std::invalid_argument("Возраст владельца не может быть отрицательным!");
+        }
+        this->ownerAge = ownerAge;
+    }
+
+    void setMoney(int money) {
+        if (money < 0) {
+            throw std::invalid_argument("Количество денег не может быть отрицательным!");
+        }
+        this->money = money;
+    }
 
     void addNewPet(std::shared_ptr<Pet> pet) { pets.push_back(pet); }
     void removePet(std::shared_ptr<Pet> pet) {

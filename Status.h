@@ -25,10 +25,30 @@ public:
     Mood getMood() const { return mood; }
 
     //Сеттеры
-    void setSatiety(int satiety) { this->satiety = (satiety > this->maxSatiety) ? this->maxSatiety : satiety; }
-    void setEnergy(int energy) { this->energy = (energy > this->maxEnergy) ? this->maxEnergy : energy; }
-    void setHealth(int health) { this->health = (health > this->maxHealth) ? this->maxHealth : health; }
-    void setMood(Mood mood) { this->mood = mood; }
+    void setSatiety(int satiety) {
+        if (satiety < 0 || satiety > maxSatiety) {
+            throw std::invalid_argument("Уровень сытости должен быть в диапазоне от 0 до " + std::to_string(maxSatiety) + "!");
+        }
+        this->satiety = satiety;
+    }
+
+    void setEnergy(int energy) {
+        if (energy < 0 || energy > maxEnergy) {
+            throw std::invalid_argument("Уровень энергии должен быть в диапазоне от 0 до " + std::to_string(maxEnergy) + "!");
+        }
+        this->energy = energy;
+    }
+
+    void setHealth(int health) {
+        if (health < 0 || health > maxHealth) {
+            throw std::invalid_argument("Уровень здоровья должен быть в диапазоне от 0 до " + std::to_string(maxHealth) + "!");
+        }
+        this->health = health;
+    }
+
+    void setMood(Mood mood) {
+        this->mood = mood;
+    }
 
     static const int maxEnergy = 100;
     static const int maxHealth = 100;
