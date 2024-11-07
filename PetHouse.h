@@ -17,8 +17,10 @@ public:
         houseCount++;
     }
 
-    PetHouse(const std::string& houseName, const std::string& address, int comfortLevel)
-        : houseName(houseName), address(address), comfortLevel(comfortLevel) {
+    PetHouse(const std::string& houseName, const std::string& address, int comfortLevel) {
+        setHouseName(houseName);
+        setAddress(address);
+        setComfortLevel(comfortLevel);
         houseCount++;
     }
 

@@ -17,7 +17,10 @@ private:
 public:
     GameDay() : dayNumber(0), weather(SUNNY) {}
     GameDay(int dayNumber, Weather weather)
-        : dayNumber(dayNumber), weather(weather) {}
+    {
+        setDayNumber(dayNumber);
+        setWeather(weather);
+    }
 
     //Конструктор копирования
     GameDay(const GameDay& other)
