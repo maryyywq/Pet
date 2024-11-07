@@ -7,18 +7,15 @@
 #include "LaserPointer.h"
 #include "Owner.h"
 
-
 int main() {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
-    Owner valera;
-    Cat* cat = new Cat("Чешка", 5);
-    Dog* dog = new Dog("Мухтар", 10);
-    std::shared_ptr<Cat> catptr{ cat };
-    valera.addNewPet(catptr);
-    std::shared_ptr<Dog> dogptr{ dog };
-    valera.addNewPet(dogptr);
+    Owner valera("Валера", 35, 2000);
+    Cat* cat = new Cat("Чешка", 5, FEMALE);
+    Dog* dog = new Dog("Мухтар", 10, MALE);
+    valera.addNewPet(cat);
+    valera.addNewPet(dog);
     
     auto pet = valera.getPet("Чешка");
     std::cout << pet->getType() << std::endl;
@@ -27,7 +24,23 @@ int main() {
     std::cout << pet->getType() << std::endl;
     pet->makeSound();
 
-    areFriends(catptr, dogptr);
+    areFriends(cat, dog);
+
+    Cat cat2("Барсик", 4, MALE);
+    Dog dog2("Сима", 3, FEMALE);
+    try
+    {
+        auto newcat = *cat + cat2;
+        auto newdog = *dog + dog2;
+    }
+    catch (const std::exception& e)
+    {
+       std::cout << e.what() << std::endl;
+    }
+
+    std::cout << valera;
+    valera += &cat2;
+    std::cout << valera;
     
     return 0;
 }

@@ -6,8 +6,29 @@
 class Cat : public Pet {
 public:
     Cat() : Pet() {}
-    Cat(const std::string& name, int age) : Pet(name, age) {}
+    Cat(const std::string& name, int age, Sex sex) : Pet(name, age, sex) {}
     ~Cat() = default; //Деструктор по умолчанию
+
+    Cat operator + (const Cat& otherpet) const
+    {
+        if (sex != otherpet.getSex() && abs(age - otherpet.getAge()) <= 2) {
+            srand(time(0));
+
+            if (rand() % 100 <= 50) {
+                std::string newname = "Маленький " + (sex == MALE ? name : otherpet.getName());
+                std::cout << newname << " родился!" << std::endl;
+                return Cat(newname, 0, MALE);
+            }
+            else {
+                std::string newname = "Маленькая " + (sex == FEMALE ? name : otherpet.getName());
+                std::cout << newname << " родилась!" << std::endl;
+                return Cat(newname, 0, FEMALE);
+            }
+        }
+        else {
+            throw std::exception("Новый котенок не получится!");
+        }
+    }
 
     void makeSound() const override {
         std::cout << name << " говорит: Мяу!" << std::endl;
@@ -20,5 +41,5 @@ public:
         Pet::setAge(age);
     }
 
-    std::string getType() override { return "Cat"; }
+    std::string getType() const override { return "Cat"; }
 };

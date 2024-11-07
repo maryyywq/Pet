@@ -10,5 +10,5 @@ public:
         : PetItem(foodName, nutritionValue, cost) {}
     ~Food() = default; //Деструктор по умолчанию
 
-    std::string getType() override { return "Food"; }
+    std::string getType() const override { return "Food"; }
 };

@@ -139,6 +139,7 @@
     <ClInclude Include="Pet.h" />
     <ClInclude Include="PetHouse.h" />
     <ClInclude Include="PetItem.h" />
+    <ClInclude Include="Sex.h" />
     <ClInclude Include="Status.h" />
   </ItemGroup>
   <ItemGroup>
