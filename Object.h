@@ -3,5 +3,5 @@
 class Object
 {
 public:
-	virtual std::string getType() = 0;
+	virtual std::string getType() const = 0;
 };

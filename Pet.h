@@ -9,21 +9,24 @@
 #include "Food.h"
 #include "PetItem.h"
 #include "Mood.h"
+#include "Sex.h"
 
 //Абстрактный класс питомца
 class Pet : public Object {
+    friend class Owner;
 protected:
     std::string name;
     int age;
     Status status;
+    Sex sex;
 
 public:
-    Pet() : name(""), age(0), status() {}
-    Pet(const std::string& name, int age) : name(name), age(age), status() {}
+    Pet() : name(""), age(0), status(), sex(MALE) {}
+    Pet(const std::string& name, int age, Sex sex) : name(name), age(age), status(), sex(sex) {}
 
     //Конструктор копирования
     Pet(const Pet& other)
-        : name(other.name), age(other.age), status(other.status) {
+        : name(other.name), age(other.age), status(other.status), sex(other.sex) {
     }
 
     virtual ~Pet() = default; //Виртуальный деструктор по умолчанию
@@ -32,6 +35,7 @@ public:
     std::string getName() const { return name; }
     int getAge() const { return age; }
     const Status& getStatus() const { return status; }
+    Sex getSex() const { return sex; }
 
     //Сеттеры
     void setName(const std::string& name) {
@@ -48,6 +52,11 @@ public:
     void setStatus(const Status& status) {
         this->status = status;
     }
+
+    void setSex(Sex sex) {
+        this->sex = sex;
+    }
+
 
     virtual void makeSound() const = 0; //Чисто виртуальная функция
 
@@ -71,37 +80,6 @@ public:
         }
     }
 
-    void play(Game game) {
-        if (status.getEnergy() >= game.getEnergyCost()) {
-            status.setMood(HAPPY);
-            status.setEnergy(status.getEnergy() - game.getEnergyCost());
-            status.setSatiety(status.getSatiety() - satietyCost);
-            std::cout << name << " поиграл(а) и очень счастлив(а)!" << std::endl;
-            makeSound(); //Питомец издает звук после игры
-        }
-        else {
-            std::cout << name << " слишком устал(а) для игры." << std::endl;
-        }
-    }
-
-    void walk(Weather weather) {
-        if (weather == STORM || weather == RAINY || weather == WINDY) {
-            status.setMood(AFRAID);
-            status.setHealth(status.getHealth() - healthCost);
-            if (status.getHealth() < 0) status.setHealth(0);
-            std::cout << name << " испугался(ась) из-за плохой погоды." << std::endl;
-        }
-        else {
-            status.setMood(HAPPY);
-            std::cout << name << " гуляет и наслаждается хорошей погодой." << std::endl;
-        }
-        status.setEnergy(status.getEnergy() - walkEnergyCost);
-        status.setSatiety(status.getSatiety() - satietyCost);
-        if (status.getEnergy() < 0) status.setEnergy(0);
-
-        makeSound(); //Питомец издает звук после прогулки
-    }
-
     void sleep(PetHouse house) {
         status.setEnergy(status.getEnergy() + house.getComfortLevel());
         status.setSatiety(status.getSatiety() - sleepHungerCost);
@@ -120,7 +98,7 @@ public:
         makeSound(); //Питомец издает звук после сна
     }
 
-    friend bool areFriends(std::shared_ptr<Pet> Pet1, std::shared_ptr<Pet> Pet2);
+    friend bool areFriends(Pet* Pet1, Pet* Pet2);
 
     static const int walkEnergyCost = 5;
     static const int healthCost = 5;
@@ -138,7 +116,7 @@ std::ostream& operator<<(std::ostream& stream, const Pet& pet) {
     return stream;
 }
 
-bool areFriends(std::shared_ptr<Pet> Pet1, std::shared_ptr<Pet> Pet2)
+bool areFriends(Pet* Pet1, Pet* Pet2)
 {
     if (Pet1->getType() == Pet2->getType() && abs(Pet1->age - Pet2->age) <= 2)
     {

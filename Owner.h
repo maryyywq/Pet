@@ -8,7 +8,7 @@ private:
     std::string ownerName;
     int ownerAge;
     int money;
-    std::vector<std::shared_ptr<Pet>> pets;
+    std::vector<Pet*> pets;
 public:
     Owner() : ownerName(""), ownerAge(0), money(0) {}
     Owner(const std::string& ownerName, int ownerAge, int money)
@@ -21,10 +21,10 @@ public:
     ~Owner() = default; 
 
     //Геттеры
-    std::string getOwnerName() const { return this->ownerName; }
-    int getOwnerAge() const { return this->ownerAge; }
+    std::string getName() const { return this->ownerName; }
+    int getAge() const { return this->ownerAge; }
     int getMoney() const { return this->money; }
-    const std::vector<std::shared_ptr<Pet>>& getPets() const { return this->pets; }
+    const std::vector<Pet*>& getPets() const { return this->pets; }
 
     //Сеттеры
     void setOwnerName(const std::string& ownerName) {
@@ -48,8 +48,8 @@ public:
         this->money = money;
     }
 
-    void addNewPet(std::shared_ptr<Pet> pet) { pets.push_back(pet); }
-    void removePet(std::shared_ptr<Pet> pet) {
+    void addNewPet(Pet* pet) { pets.push_back(pet); }
+    void removePet(Pet* pet) {
         int index = -1;
         for (int i = 0; i < pets.size(); i++)
         {
@@ -61,7 +61,7 @@ public:
         if (index != -1) pets.erase(pets.cbegin() + index);
         else std::cout << "Такого питомца у этого хозяина нет!" << std::endl;
     }
-    std::shared_ptr<Pet> getPet(std::string name) {
+    Pet* getPet(std::string name) {
         for (int i = 0; i < pets.size(); i++)
         {
             if (pets[i]->getName() == name) {
@@ -71,4 +71,60 @@ public:
         std::cout << "Такого питомца у этого хозяина нет!" << std::endl;
         return nullptr;
     }
+
+    Owner& operator+=(Pet* newpet) {
+        addNewPet(newpet);
+        return *this;
+    }
+
+    void walk(std::string name, Weather weather) {
+        auto mypet = getPet(name);
+
+        if (mypet == nullptr) return;
+
+        if (weather == STORM || weather == RAINY || weather == WINDY) {
+            mypet->status.setMood(AFRAID);
+            mypet->status.setHealth(mypet->status.getHealth() - mypet->healthCost);
+            if (mypet->status.getHealth() < 0) mypet->status.setHealth(0);
+            std::cout << name << " испугался(ась) из-за плохой погоды." << std::endl;
+        }
+        else {
+            mypet->status.setMood(HAPPY);
+            std::cout << name << " гуляет и наслаждается хорошей погодой." << std::endl;
+        }
+        mypet->status.setEnergy(mypet->status.getEnergy() - mypet->walkEnergyCost);
+        mypet->status.setSatiety(mypet->status.getSatiety() - mypet->satietyCost);
+        if (mypet->status.getEnergy() < 0) mypet->status.setEnergy(0);
+
+        mypet->makeSound(); //Питомец издает звук после прогулки
+    }
+
+    void play(std::string name, Game game) {
+        auto mypet = getPet(name);
+
+        if (mypet == nullptr) return;
+
+        if (mypet->status.getEnergy() >= game.getEnergyCost()) {
+            mypet->status.setMood(HAPPY);
+            mypet->status.setEnergy(mypet->status.getEnergy() - game.getEnergyCost());
+            mypet->status.setSatiety(mypet->status.getSatiety() - mypet->satietyCost);
+            std::cout << name << " поиграл(а) и очень счастлив(а)!" << std::endl;
+            mypet->makeSound(); //Питомец издает звук после игры
+        }
+        else {
+            std::cout << name << " слишком устал(а) для игры." << std::endl;
+        }
+    }
 }; 
+
+std::ostream& operator<<(std::ostream& stream, const Owner& owner) {
+    stream << "Имя владельца: " << owner.getName() << std::endl;
+    stream << "Возраст: " << owner.getAge() << std::endl;
+    stream << "Количество денег: " << owner.getMoney() << std::endl;
+    stream << "Питомцы: " << std::endl;
+    for (int i = 0; i < owner.getPets().size(); i++)
+    {
+        stream << "\t" << owner.getPets()[i]->getName() << std::endl;
+    }
+    return stream;
+}
