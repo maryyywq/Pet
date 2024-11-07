@@ -25,7 +25,24 @@ public:
     int getCost() const { return cost; }
 
     //Сеттеры
-    void setName(const std::string& name) { this->name = name; }
-    void setValue(int value) { this->value = value; }
-    void setCost(int cost) { this->cost = cost; }
+    void setName(const std::string& name) {
+        if (name.empty()) {
+            throw std::invalid_argument("Название предмета не может быть пустым!");
+        }
+        this->name = name;
+    }
+
+    void setValue(int value) {
+        if (value < 0) {
+            throw std::invalid_argument("Значение предмета не может быть отрицательным!");
+        }
+        this->value = value;
+    }
+
+    void setCost(int cost) {
+        if (cost < 0) {
+            throw std::invalid_argument("Стоимость предмета не может быть отрицательной!");
+        }
+        this->cost = cost;
+    }
 };
