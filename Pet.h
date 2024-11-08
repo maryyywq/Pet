@@ -84,7 +84,7 @@ public:
         }
     }
 
-    void sleep(PetHouse house) {
+    void sleep(const PetHouse& house) {
         status.setEnergy(status.getEnergy() + house.getComfortLevel());
         status.setSatiety(status.getSatiety() - sleepHungerCost);
         if (status.getEnergy() > Status::maxEnergy) {
