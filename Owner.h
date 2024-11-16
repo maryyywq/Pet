@@ -18,9 +18,9 @@ public:
         setMoney(money);
     }
 
-    // онструктор копировани€
-    Owner(const Owner& other)
-        : ownerName(other.ownerName), ownerAge(other.ownerAge), money(other.money) {}
+    //«апрет использовани€ копировани€
+    Owner(const Owner&) = delete;
+    void operator=(const Owner&) = delete;
 
     ~Owner() = default; 
 
@@ -65,7 +65,7 @@ public:
         if (index != -1) pets.erase(pets.cbegin() + index);
         else std::cout << "“акого питомца у этого хоз€ина нет!" << std::endl;
     }
-    Pet* getPet(std::string name) {
+    [[nodiscard]] Pet*getPet(std::string name) {
         for (int i = 0; i < pets.size(); i++)
         {
             if (pets[i]->getName() == name) {
@@ -87,18 +87,18 @@ public:
         if (mypet == nullptr) return;
 
         if (weather == STORM || weather == RAINY || weather == WINDY) {
-            mypet->status.setMood(AFRAID);
-            mypet->status.setHealth(mypet->status.getHealth() - mypet->healthCost);
-            if (mypet->status.getHealth() < 0) mypet->status.setHealth(0);
+            mypet->status->setMood(AFRAID);
+            mypet->status->setHealth(mypet->status->getHealth() - mypet->healthCost);
+            if (mypet->status->getHealth() < 0) mypet->status->setHealth(0);
             std::cout << name << " испугалс€(ась) из-за плохой погоды." << std::endl;
         }
         else {
-            mypet->status.setMood(HAPPY);
+            mypet->status->setMood(HAPPY);
             std::cout << name << " гул€ет и наслаждаетс€ хорошей погодой." << std::endl;
         }
-        mypet->status.setEnergy(mypet->status.getEnergy() - mypet->walkEnergyCost);
-        mypet->status.setSatiety(mypet->status.getSatiety() - mypet->satietyCost);
-        if (mypet->status.getEnergy() < 0) mypet->status.setEnergy(0);
+        mypet->status->setEnergy(mypet->status->getEnergy() - mypet->walkEnergyCost);
+        mypet->status->setSatiety(mypet->status->getSatiety() - mypet->satietyCost);
+        if (mypet->status->getEnergy() < 0) mypet->status->setEnergy(0);
 
         mypet->makeSound(); //ѕитомец издает звук после прогулки
     }
@@ -108,10 +108,10 @@ public:
 
         if (mypet == nullptr) return;
 
-        if (mypet->status.getEnergy() >= game.getEnergyCost()) {
-            mypet->status.setMood(HAPPY);
-            mypet->status.setEnergy(mypet->status.getEnergy() - game.getEnergyCost());
-            mypet->status.setSatiety(mypet->status.getSatiety() - mypet->satietyCost);
+        if (mypet->status->getEnergy() >= game.getEnergyCost()) {
+            mypet->status->setMood(HAPPY);
+            mypet->status->setEnergy(mypet->status->getEnergy() - game.getEnergyCost());
+            mypet->status->setSatiety(mypet->status->getSatiety() - mypet->satietyCost);
             std::cout << name << " поиграл(а) и очень счастлив(а)!" << std::endl;
             mypet->makeSound(); //ѕитомец издает звук после игры
         }

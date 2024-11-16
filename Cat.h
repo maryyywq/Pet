@@ -7,7 +7,10 @@ class Cat : public Pet {
 public:
     Cat() : Pet() {}
     Cat(const std::string& name, int age, Sex sex) : Pet(name, age, sex) {}
-    ~Cat() = default; //Деструктор по умолчанию
+    ~Cat()
+    {
+        std::cout << "Ваш кот " << name << " убежал!" << std::endl;
+    }
 
     Cat operator + (const Cat& otherpet) const
     {

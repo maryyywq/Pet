@@ -17,12 +17,12 @@ class Pet : public Object {
 protected:
     std::string name;
     int age;
-    Status status;
+    Status* status = new Status();
     Sex sex;
 
 public:
-    Pet() : name(""), age(0), status(), sex(MALE) {}
-    Pet(const std::string& name, int age, Sex sex) {
+    Pet() : name(""), age(0), sex(MALE) {}
+    Pet(const std::string& name, int age, Sex sex) : Pet() {
         setName(name);
         setAge(age);
         setSex(sex);
@@ -30,19 +30,23 @@ public:
 
     //Конструктор копирования
     Pet(const Pet& other)
-        : name(other.name), age(other.age), status(other.status), sex(other.sex) {
+        : name(other.name), age(other.age), sex(other.sex) {
+        status = new Status(*other.status);
     }
 
-    virtual ~Pet() = default; //Виртуальный деструктор по умолчанию
+    virtual ~Pet()
+    {
+        delete status;
+    }
 
     //Геттеры
-    std::string getName() const { return name; }
-    int getAge() const { return age; }
-    const Status& getStatus() const { return status; }
-    Sex getSex() const { return sex; }
+    virtual std::string getName() const { return name; }
+    virtual int getAge() const { return age; }
+    virtual const Status& getStatus() const { return *status; }
+    virtual Sex getSex() const { return sex; }
 
     //Сеттеры
-    void setName(const std::string& name) {
+    virtual void setName(const std::string& name) {
         if (name.empty()) {
             throw std::invalid_argument("Имя питомца не может быть пустым.");
         }
@@ -53,11 +57,11 @@ public:
         this->age = age;
     }
 
-    void setStatus(const Status& status) {
-        this->status = status;
+    virtual void setStatus(const Status& status) {
+        this->status = new Status(status);
     }
 
-    void setSex(Sex sex) {
+    virtual void setSex(Sex sex) {
         this->sex = sex;
     }
 
@@ -66,38 +70,38 @@ public:
 
     void use(PetItem* item) {
         if (item->getType() == "Food") {
-            int newSatiety = status.getSatiety() + item->getValue();
-            status.setSatiety(newSatiety);
-            if (status.getSatiety() == Status::maxSatiety) {
-                status.setMood(HAPPY);
+            int newSatiety = status->getSatiety() + item->getValue();
+            status->setSatiety(newSatiety);
+            if (status->getSatiety() == Status::maxSatiety) {
+                status->setMood(HAPPY);
             }
             std::cout << name << " покушал(а) " << item->getName() << " и его(ее) голод уменьшился." << std::endl;
             makeSound(); //Питомец издает звук после еды
         }
         else if (item->getType() == "Medicine") {
-            status.setHealth(status.getHealth() + item->getValue());
-            if (status.getHealth() > Status::maxHealth) {
-                status.setHealth(Status::maxHealth);
-                status.setMood(HAPPY);
+            status->setHealth(status->getHealth() + item->getValue());
+            if (status->getHealth() > Status::maxHealth) {
+                status->setHealth(Status::maxHealth);
+                status->setMood(HAPPY);
             }
             std::cout << name << " принял(а) " << item->getName() << " и его(ее) здоровье улучшилось." << std::endl;
         }
     }
 
     void sleep(const PetHouse& house) {
-        status.setEnergy(status.getEnergy() + house.getComfortLevel());
-        status.setSatiety(status.getSatiety() - sleepHungerCost);
-        if (status.getEnergy() > Status::maxEnergy) {
-            status.setEnergy(Status::maxEnergy);
+        status->setEnergy(status->getEnergy() + house.getComfortLevel());
+        status->setSatiety(status->getSatiety() - sleepHungerCost);
+        if (status->getEnergy() > Status::maxEnergy) {
+            status->setEnergy(Status::maxEnergy);
         }
 
-        if (status.getEnergy() >= 50) {
+        if (status->getEnergy() >= 50) {
             std::cout << name << " хорошо отдохнул(а)!" << std::endl;
-            status.setMood(HAPPY);
+            status->setMood(HAPPY);
         }
         else {
             std::cout << name << " не очень хорошо отдохнул(а) :(" << std::endl;
-            status.setMood(SAD);
+            status->setMood(SAD);
         }
         makeSound(); //Питомец издает звук после сна
     }
@@ -120,19 +124,19 @@ std::ostream& operator<<(std::ostream& stream, const Pet& pet) {
     return stream;
 }
 
-bool areFriends(Pet* Pet1, Pet* Pet2)
+static bool areFriends(Pet* Pet1, Pet* Pet2)
 {
     if (Pet1->getType() == Pet2->getType() && abs(Pet1->age - Pet2->age) <= 2)
     {
-        Pet1->status.setMood(HAPPY);
-        Pet2->status.setMood(HAPPY);
+        Pet1->status->setMood(HAPPY);
+        Pet2->status->setMood(HAPPY);
         std::cout << Pet1->name << " и " << Pet2->name << " - друзья!" << std::endl;
         return true;
     }
     else
     {
-        Pet1->status.setMood(ANGRY);
-        Pet2->status.setMood(ANGRY);
+        Pet1->status->setMood(ANGRY);
+        Pet2->status->setMood(ANGRY);
         std::cout << Pet1->name << " и " << Pet2->name << " совсем не друзья!" << std::endl;
         return false;
     }

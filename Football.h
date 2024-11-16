@@ -5,7 +5,16 @@
 class Football :
     public Game
 {
+private:
+    int ballQuality;
 public:
-    void play() { std::cout << "€ пинаю м€ч!" << std::endl; }
+    Football() : Game() {
+        ballQuality = 100;
+    }
+    Football(const Game& other) : Game(other) { 
+        ballQuality = 100;
+    }
+
+    void play() { std::cout << "я пинаю м€ч!" << std::endl; }
 };
 
