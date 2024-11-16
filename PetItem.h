@@ -2,7 +2,7 @@
 #include <string>
 #include "Object.h"
 
-class PetItem :public Object{
+class PetItem :public Object {
 protected:
     std::string name;
     int value;
@@ -24,26 +24,26 @@ public:
     virtual ~PetItem() = default; //Деструктор по умолчанию
 
     //Геттеры
-    std::string getName() const { return name; }
-    int getValue() const { return value; }
-    int getCost() const { return cost; }
+    virtual std::string getName() const { return name; }
+    virtual int getValue() const { return value; }
+    virtual int getCost() const { return cost; }
 
     //Сеттеры
-    void setName(const std::string& name) {
+    virtual void setName(const std::string& name) {
         if (name.empty()) {
             throw std::invalid_argument("Название предмета не может быть пустым!");
         }
         this->name = name;
     }
 
-    void setValue(int value) {
+    virtual void setValue(int value) {
         if (value < 0) {
             throw std::invalid_argument("Значение предмета не может быть отрицательным!");
         }
         this->value = value;
     }
 
-    void setCost(int cost) {
+    virtual void setCost(int cost) {
         if (cost < 0) {
             throw std::invalid_argument("Стоимость предмета не может быть отрицательной!");
         }
