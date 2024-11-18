@@ -34,7 +34,7 @@ public:
         std::cout << name << " говорит: Гав!" << std::endl;
     }
 
-    void setAge(int age) override {
+    void setAge(int age) override{
         if (age < 0 || age > 30) {
             throw std::invalid_argument("Возраст собаки должен быть в пределах от 0 до 30.");
         }

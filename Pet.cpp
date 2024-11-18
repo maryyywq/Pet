@@ -25,10 +25,13 @@ int main() {
     Football foot = game;
     foot.play();
 
-    //Owner valeraZmhizhenko = valera;
+    //Owner valera1 = valera;
 
     Pet* cat3 = new Cat("Васька Динамический", 5, MALE);
     delete cat3;
+
+    Pet* pet = new Cat();
+    pet->setAge(26);
 
     return 0;
 }
