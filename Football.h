@@ -11,6 +11,7 @@ public:
     Football() : Game() {
         ballQuality = 100;
     }
+
     Football(const Game& other) : Game(other) { 
         ballQuality = 100;
     }
