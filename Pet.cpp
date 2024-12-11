@@ -6,32 +6,29 @@
 #include "Football.h"
 #include "LaserPointer.h"
 #include "Owner.h"
+#include "Parrot.h"
 
 int main() {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     
-    Cat cat1 = Cat("Чернушка", 4, FEMALE);
-    Owner valera;
-    valera.addNewPet(&cat1);
-    valera.walk("Чернушка", SUNNY);
-    Cat cat2 = cat1;
-    cat1.use(new Food("Вискас", 10, 100));
+    Pet* myCat = new Cat();
+    Pet* myDog = new Dog();
+    Pet* myParrot = new Parrot();
 
-    std::cout << cat1 << std::endl;
-    std::cout << cat2 << std::endl;
-        
-    Game game{ "Веселуха", 50, 25 };
-    Football foot = game;
-    foot.play();
+    myCat->performSound(); 
+    myDog->performSound();
+    myParrot->performSound(); 
+    ((Parrot*)myParrot)->learnNewSound(new MeowBehavior()); //пытаемся научить попугая мяукать
+    myParrot->performSound(); 
 
-    //Owner valera1 = valera;
+    myCat->performMove(); 
+    myDog->performMove();
+    myParrot->performMove();
 
-    Pet* cat3 = new Cat("Васька Динамический", 5, MALE);
-    delete cat3;
-
-    Pet* pet = new Cat();
-    pet->setAge(26);
+    delete myCat;
+    delete myDog;
+    delete myParrot;
 
     return 0;
 }

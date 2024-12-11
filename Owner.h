@@ -99,8 +99,6 @@ public:
         mypet->status->setEnergy(mypet->status->getEnergy() - mypet->walkEnergyCost);
         mypet->status->setSatiety(mypet->status->getSatiety() - mypet->satietyCost);
         if (mypet->status->getEnergy() < 0) mypet->status->setEnergy(0);
-
-        mypet->makeSound(); //Питомец издает звук после прогулки
     }
 
     void play(std::string name, Game game) {
@@ -113,7 +111,6 @@ public:
             mypet->status->setEnergy(mypet->status->getEnergy() - game.getEnergyCost());
             mypet->status->setSatiety(mypet->status->getSatiety() - mypet->satietyCost);
             std::cout << name << " поиграл(а) и очень счастлив(а)!" << std::endl;
-            mypet->makeSound(); //Питомец издает звук после игры
         }
         else {
             std::cout << name << " слишком устал(а) для игры." << std::endl;

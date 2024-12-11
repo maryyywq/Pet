@@ -125,22 +125,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BarkBehavior.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="Dog.h" />
+    <ClInclude Include="FlyBehavior.h" />
     <ClInclude Include="Food.h" />
     <ClInclude Include="Football.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameDay.h" />
     <ClInclude Include="LaserPointer.h" />
     <ClInclude Include="Medicine.h" />
+    <ClInclude Include="MeowBehavior.h" />
     <ClInclude Include="Mood.h" />
+    <ClInclude Include="MoveBehavior.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Owner.h" />
+    <ClInclude Include="Parrot.h" />
     <ClInclude Include="Pet.h" />
     <ClInclude Include="PetHouse.h" />
     <ClInclude Include="PetItem.h" />
+    <ClInclude Include="RunBehavior.h" />
     <ClInclude Include="Sex.h" />
+    <ClInclude Include="SoundBehavior.h" />
     <ClInclude Include="Status.h" />
+    <ClInclude Include="TweetBehavior.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Pet.cpp" />
