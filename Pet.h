@@ -10,6 +10,8 @@
 #include "PetItem.h"
 #include "Mood.h"
 #include "Sex.h"
+#include "SoundBehavior.h"
+#include "MoveBehavior.h"
 
 //Абстрактный класс питомца
 class Pet : public Object {
@@ -19,24 +21,56 @@ protected:
     int age;
     Status* status = new Status();
     Sex sex;
+    SoundBehavior* soundBehavior = nullptr; //делегирование поведения
+    MoveBehavior* moveBehavior = nullptr; //делегирование поведения
+
+    void setSoundBehavior(SoundBehavior* sb) {
+        if (soundBehavior != nullptr) 
+            delete soundBehavior; //Очистка предыдущего поведения
+        soundBehavior = sb;
+    }
+
+    void setMoveBehavior(MoveBehavior* mb) {
+        if (moveBehavior != nullptr) 
+            delete moveBehavior; //Очистка предыдущего поведения
+        moveBehavior = mb;
+    }
 
 public:
     Pet() : name(""), age(0), sex(MALE) {}
-    Pet(const std::string& name, int age, Sex sex) : Pet() {
+    Pet(const std::string& name, int age, Sex sex, SoundBehavior* sb, MoveBehavior* mb) : Pet() {
         setName(name);
         setAge(age);
         setSex(sex);
+        setSoundBehavior(sb);
+        setMoveBehavior(mb);
     }
 
     //Конструктор копирования
     Pet(const Pet& other)
-        : name(other.name), age(other.age), sex(other.sex) {
+        : name(other.name), age(other.age), sex(other.sex), soundBehavior(other.soundBehavior), moveBehavior(other.moveBehavior) {
         status = new Status(*other.status);
     }
 
     virtual ~Pet()
     {
         delete status;
+        delete soundBehavior;
+        delete moveBehavior;
+    }
+
+    void performSound() const {
+        if (soundBehavior != nullptr) 
+            soundBehavior->makeSound();
+        else
+            std::cout << "Ваш питомец не умеет издавать звуков!" << std::endl;
+    }
+
+    void performMove() const {
+        if (moveBehavior != nullptr)
+            moveBehavior->move();
+        else
+            std::cout << "Ваш питомец не умеет двигаться!" << std::endl;
     }
 
     //Геттеры
@@ -44,6 +78,8 @@ public:
     virtual int getAge() const { return age; }
     virtual const Status& getStatus() const { return *status; }
     virtual Sex getSex() const { return sex; }
+    virtual const SoundBehavior& getSound() const { return *soundBehavior; }
+    virtual const MoveBehavior& getMove() const { return *moveBehavior; }
 
     //Сеттеры
     virtual void setName(const std::string& name) {
@@ -65,9 +101,6 @@ public:
         this->sex = sex;
     }
 
-
-    virtual void makeSound() const = 0; //Чисто виртуальная функция
-
     void use(PetItem* item) {
         if (item->getType() == "Food") {
             int newSatiety = status->getSatiety() + item->getValue();
@@ -76,7 +109,6 @@ public:
                 status->setMood(HAPPY);
             }
             std::cout << name << " покушал(а) " << item->getName() << " и его(ее) голод уменьшился." << std::endl;
-            makeSound(); //Питомец издает звук после еды
         }
         else if (item->getType() == "Medicine") {
             status->setHealth(status->getHealth() + item->getValue());
@@ -103,7 +135,6 @@ public:
             std::cout << name << " не очень хорошо отдохнул(а) :(" << std::endl;
             status->setMood(SAD);
         }
-        makeSound(); //Питомец издает звук после сна
     }
 
     friend bool areFriends(Pet* Pet1, Pet* Pet2);

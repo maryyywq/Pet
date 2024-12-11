@@ -1,12 +1,16 @@
 #pragma once
 #include <string>
 #include "Pet.h"
+#include "MeowBehavior.h"
+#include "RunBehavior.h"
 
 // ласс кошки
 class Cat : public Pet {
 public:
-    Cat() : Pet() {}
-    Cat(const std::string& name, int age, Sex sex) : Pet(name, age, sex) {}
+    Cat() : Pet() { setSoundBehavior(new MeowBehavior()), setMoveBehavior(new RunBehavior); }
+
+    Cat(const std::string& name, int age, Sex sex) : Pet(name, age, sex, new MeowBehavior(), new RunBehavior()) {}
+
     ~Cat()
     {
         std::cout << "¬аш кот " << name << " убежал!" << std::endl;
@@ -33,9 +37,6 @@ public:
         }
     }
 
-    void makeSound() const override {
-        std::cout << name << " говорит: ћ€у!" << std::endl;
-    }
 
     void setAge(int age) override {
         if (age < 0 || age > 26) {
