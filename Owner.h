@@ -77,8 +77,8 @@ public:
     }
 
     void removeItem(std::string name) {
-        auto it = std::find_if(itemInventory.begin(), itemInventory.end(), [&name](PetItem const& item) {
-            return item.getName() == name;
+        auto it = std::find_if(itemInventory.begin(), itemInventory.end(), [&name](PetItem* item) {
+            return item->getName() == name;
         });
 
         if (it != itemInventory.end()) itemInventory.erase(it);
@@ -86,8 +86,8 @@ public:
     }
 
     PetItem* getItem(std::string name) {
-        auto it = std::find_if(itemInventory.begin(), itemInventory.end(), [&name](PetItem const& item) {
-            return item.getName() == name;
+        auto it = std::find_if(itemInventory.begin(), itemInventory.end(), [&name](PetItem* item) {
+            return item->getName() == name;
         });
 
         if (it != itemInventory.end()) {
@@ -98,14 +98,14 @@ public:
     }
 
     void sortItemsByValue() {
-        std::sort(itemInventory.begin(), itemInventory.end(), [](const PetItem& left, const PetItem& right) {
-            return left.getValue() > right.getValue();
+        std::sort(itemInventory.begin(), itemInventory.end(), [](PetItem* left, PetItem* right) {
+            return left->getValue() > right->getValue();
         });
     }
 
     void sortItemsByCost() {
-        std::sort(itemInventory.begin(), itemInventory.end(), [](const PetItem& left, const PetItem& right) {
-            return left.getCost() > right.getCost();
+        std::sort(itemInventory.begin(), itemInventory.end(), [](PetItem* left, PetItem* right) {
+            return left->getCost() > right->getCost();
         });
     }
 
@@ -159,6 +159,11 @@ std::ostream& operator<<(std::ostream& stream, const Owner& owner) {
     for (auto& pair : owner.getPets())
     {
         stream << "\t" << pair.first << std::endl;
+    }
+    stream << "Предметы в инвентаре: " << std::endl;
+    for (auto& item : owner.getInventory())
+    {
+        stream << "\t" << item->getName() << std::endl;
     }
     return stream;
 }
