@@ -3,6 +3,7 @@
 #include <vector>
 #include "Pet.h"
 #include <map>
+#include <algorithm>
 
 class Owner {
 private:
@@ -10,6 +11,8 @@ private:
     int ownerAge;
     int money;
     std::map<std::string, Pet*> pets; 
+    std::vector<PetItem*> itemInventory;
+
 public:
     Owner() : ownerName(""), ownerAge(0), money(0) {}
     Owner(const std::string& ownerName, int ownerAge, int money)
@@ -29,7 +32,8 @@ public:
     std::string getName() const { return this->ownerName; }
     int getAge() const { return this->ownerAge; }
     int getMoney() const { return this->money; }
-    const std::map <std::string, Pet*>& getPets() const { return this->pets; }
+    const std::map<std::string, Pet*>& getPets() const { return this->pets; }
+    const std::vector<PetItem*>& getInventory() const { return this->itemInventory; }
 
     //Сеттеры
     void setOwnerName(const std::string& ownerName) {
@@ -53,7 +57,7 @@ public:
         this->money = money;
     }
 
-    void addNewPet(Pet* pet) { 
+    void addPet(Pet* pet) { 
         pets[pet->name] = pet; 
     }
 
@@ -68,8 +72,49 @@ public:
         return pet;
     }
 
+    void addItem(PetItem* item) {
+        itemInventory.push_back(item);
+    }
+
+    void removeItem(std::string name) {
+        int index = -1;
+        for (int i = 0; i < itemInventory.size(); i++)
+        {
+            if (itemInventory[i]->getName() == name) {
+                index = i;
+                break;
+            }
+        }
+        if (index != -1) itemInventory.erase(itemInventory.cbegin() + index);
+        else std::cout << "Такого предмета не существует!" << std::endl;
+    }
+
+    PetItem* getItem(std::string name) {
+        auto it = std::find_if(itemInventory.begin(), itemInventory.end(), [&name](PetItem const& item) {
+            return item.getName() == name;
+        });
+
+        if (it != itemInventory.end()) {
+            return *it;
+        }
+        std::cout << "Такого предмета не существует!" << std::endl;
+        return nullptr;
+    }
+
+    void sortItemsByValue() {
+        std::sort(itemInventory.begin(), itemInventory.end(), [](const PetItem& left, const PetItem& right) {
+            return left.getValue() > right.getValue();
+        });
+    }
+
+    void sortItemsByCost() {
+        std::sort(itemInventory.begin(), itemInventory.end(), [](const PetItem& left, const PetItem& right) {
+            return left.getCost() > right.getCost();
+        });
+    }
+
     Owner& operator+=(Pet* newpet) {
-        addNewPet(newpet);
+        addPet(newpet);
         return *this;
     }
 
