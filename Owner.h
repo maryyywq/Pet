@@ -2,13 +2,17 @@
 #include <string>
 #include <vector>
 #include "Pet.h"
+#include <map>
+#include <algorithm>
 
 class Owner {
 private:
     std::string ownerName;
     int ownerAge;
     int money;
-    std::vector<Pet*> pets;
+    std::map<std::string, Pet*> pets; 
+    std::vector<PetItem*> itemInventory;
+
 public:
     Owner() : ownerName(""), ownerAge(0), money(0) {}
     Owner(const std::string& ownerName, int ownerAge, int money)
@@ -28,7 +32,8 @@ public:
     std::string getName() const { return this->ownerName; }
     int getAge() const { return this->ownerAge; }
     int getMoney() const { return this->money; }
-    const std::vector<Pet*>& getPets() const { return this->pets; }
+    const std::map<std::string, Pet*>& getPets() const { return this->pets; }
+    const std::vector<PetItem*>& getInventory() const { return this->itemInventory; }
 
     //Сеттеры
     void setOwnerName(const std::string& ownerName) {
@@ -52,32 +57,60 @@ public:
         this->money = money;
     }
 
-    void addNewPet(Pet* pet) { pets.push_back(pet); }
-    void removePet(Pet* pet) {
-        int index = -1;
-        for (int i = 0; i < pets.size(); i++)
-        {
-            if (pets[i] == pet) {
-                index = i;
-                break;
-            }
-        }
-        if (index != -1) pets.erase(pets.cbegin() + index);
-        else std::cout << "Такого питомца у этого хозяина нет!" << std::endl;
+    void addPet(Pet* pet) { 
+        pets[pet->name] = pet; 
     }
-    [[nodiscard]] Pet*getPet(std::string name) {
-        for (int i = 0; i < pets.size(); i++)
-        {
-            if (pets[i]->getName() == name) {
-                return pets[i];
-            }
+
+    void removePet(std::string name) {
+        pets.erase(name);
+    }
+
+    Pet* getPet(std::string name) {
+        auto pet = pets[name];
+        if (pet == nullptr)
+            std::cout << "Такого питомца у этого хозяина нет!" << std::endl;
+        return pet;
+    }
+
+    void addItem(PetItem* item) {
+        itemInventory.push_back(item);
+    }
+
+    void removeItem(std::string name) {
+        auto it = std::find_if(itemInventory.begin(), itemInventory.end(), [&name](PetItem* item) {
+            return item->getName() == name;
+        });
+
+        if (it != itemInventory.end()) itemInventory.erase(it);
+        else std::cout << "Такого предмета не существует!" << std::endl;
+    }
+
+    PetItem* getItem(std::string name) {
+        auto it = std::find_if(itemInventory.begin(), itemInventory.end(), [&name](PetItem* item) {
+            return item->getName() == name;
+        });
+
+        if (it != itemInventory.end()) {
+            return *it;
         }
-        std::cout << "Такого питомца у этого хозяина нет!" << std::endl;
+        std::cout << "Такого предмета не существует!" << std::endl;
         return nullptr;
     }
 
+    void sortItemsByValue() {
+        std::sort(itemInventory.begin(), itemInventory.end(), [](PetItem* left, PetItem* right) {
+            return left->getValue() > right->getValue();
+        });
+    }
+
+    void sortItemsByCost() {
+        std::sort(itemInventory.begin(), itemInventory.end(), [](PetItem* left, PetItem* right) {
+            return left->getCost() > right->getCost();
+        });
+    }
+
     Owner& operator+=(Pet* newpet) {
-        addNewPet(newpet);
+        addPet(newpet);
         return *this;
     }
 
@@ -123,9 +156,14 @@ std::ostream& operator<<(std::ostream& stream, const Owner& owner) {
     stream << "Возраст: " << owner.getAge() << std::endl;
     stream << "Количество денег: " << owner.getMoney() << std::endl;
     stream << "Питомцы: " << std::endl;
-    for (int i = 0; i < owner.getPets().size(); i++)
+    for (auto& pair : owner.getPets())
     {
-        stream << "\t" << owner.getPets()[i]->getName() << std::endl;
+        stream << "\t" << pair.first << std::endl;
+    }
+    stream << "Предметы в инвентаре: " << std::endl;
+    for (auto& item : owner.getInventory())
+    {
+        stream << "\t" << item->getName() << std::endl;
     }
     return stream;
 }

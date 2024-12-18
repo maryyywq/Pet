@@ -5,8 +5,11 @@
 #include "SoundBehavior.h"
 #include "TweetBehavior.h"
 #include <random>
+#include <set>
 
 class Parrot : public Pet {
+private:
+    std::set<std::string> learntSounds;
 public:
     Parrot() : Pet() { setSoundBehavior(new TweetBehavior()), setMoveBehavior(new FlyBehavior); }
 
@@ -20,10 +23,10 @@ public:
         Pet::setAge(age);
     }
 
-    void learnNewSound(SoundBehavior* newSoundBehavior) {
+    void learnNewSound(std::string newSound) {
         srand(time(0));
-        if (rand() % 2 == 0) {
-            Pet::setSoundBehavior(newSoundBehavior);
+        if (rand() % 2 == 0 && newSound.length() <= 10) {
+            learntSounds.insert(newSound);
             std::cout << "Ваш попугай научился издавать новый звук!" << std::endl;
         }
        else 
@@ -32,6 +35,15 @@ public:
        }
     }
 
-    std::string getType() const override { return "Parrot"; }
+    void makeHumanSound() {
+        auto soundsvector = std::vector<std::string>(learntSounds.begin(), learntSounds.end());
+        if (soundsvector.empty()) {
+            std::cout << "Попугай молчит..." << std::endl;
+            return;
+        }
+        srand(time(0));
+        std::cout << soundsvector[rand() % soundsvector.size()] << std::endl;
+    }
 
+    std::string getType() const override { return "Parrot"; }
  };
