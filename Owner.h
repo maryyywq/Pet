@@ -77,15 +77,11 @@ public:
     }
 
     void removeItem(std::string name) {
-        int index = -1;
-        for (int i = 0; i < itemInventory.size(); i++)
-        {
-            if (itemInventory[i]->getName() == name) {
-                index = i;
-                break;
-            }
-        }
-        if (index != -1) itemInventory.erase(itemInventory.cbegin() + index);
+        auto it = std::find_if(itemInventory.begin(), itemInventory.end(), [&name](PetItem const& item) {
+            return item.getName() == name;
+        });
+
+        if (it != itemInventory.end()) itemInventory.erase(it);
         else std::cout << "Такого предмета не существует!" << std::endl;
     }
 
